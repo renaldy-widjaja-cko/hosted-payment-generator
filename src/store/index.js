@@ -1,20 +1,22 @@
 import Vue from "vue";
-import Vuex, {
-} from "vuex";
+import Vuex, {} from "vuex";
 import axios from "axios";
+import {
+  HOSTED_TYPE
+} from "../enum/index.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     type: "",
-    form: {
-      secret: "",
-      successUrl: "",
-      failureUrl: "",
-      cancelUrl: "",
-      expiry: "",
-    },
+
+    secret: "",
+    successUrl: "",
+    failureUrl: "",
+    cancelUrl: "",
+    expiry: "",
+
     responseLink: ""
   },
   getters: {
@@ -22,53 +24,60 @@ export default new Vuex.Store({
   },
   mutations: {
     UPDATE_INIT_FORM(state, form) {
-      state.form.secret = form.Secret;
-      state.form.successUrl = form.SuccessUrl;
-      state.form.failureUrl = form.FailureUrl;
-      state.form.cancelUrl = form.CancelUrl;
+      state.secret = form.Secret;
+      state.successUrl = form.SuccessUrl;
+      state.failureUrl = form.FailureUrl;
+      state.cancelUrl = form.CancelUrl;
     },
     UPDATE_RESPONSE(state, response) {
       state.responseLink = response;
     },
     POST_PAYMENT(state, data) {
-      axios.defaults.headers.common["Authorization"] = state.form.secret;
-      var formData = {
-        "amount": data.TotalAmount,
-        "currency": data.Currency,
-        "reference": data.Reference, //A reference number for internal tracking
-        "description": data.Description, //A brief description of the transaction
-        "expires_in": state.expiry, //in seconds
-        "customer": {
-          "name": data.FirstName + " " + data.LastName,
-          "email": data.Email
-        },
-        "billing": {
-          "address": {
-            "address_line1": data.Address1,
-            "address_line2": data.Address2,
-            "city": data.City,
-            "state": data.State,
-            "zip": data.Zip,
-            "country": data.Country
-          },
-          "phone": {
-            "country_code": data.PhoneCountryCode, //+65
-            "number": data.Phone
-          }
-        },
-        "products": data.Products,
-        "3ds": {
-          "enabled": true,
-          "attempt_n3d": false
-        },
-        "return_url": state.cancelUrl,
-        "locale": "en-GB"
+      axios.defaults.headers.common["Authorization"] = state.secret;
+      if (type == HOSTED_TYPE.PAYMENT_LINK) {
+        var formData = constructPaymentLinkData(data, state)
+        axios.post("/payment-links", formData).then(
+          result => {
+            state.responseLink = result.data._links.redirect.href;
+          }).catch(exception => {
+          state.responseLink = exception;
+        })
       }
-      axios.post("/payment-links", formData).then(
-        result => {
-          state.responseLink = result.data._links.redirect.href;
-        }
-      )
     }
   }
 });
+
+function constructPaymentLinkData(data, state) {
+  return {
+    "amount": data.TotalAmount,
+    "currency": data.Currency,
+    "reference": data.Reference,
+    "description": data.Description,
+    "expires_in": state.expiry,
+    "customer": {
+      "name": data.FirstName + " " + data.LastName,
+      "email": data.Email
+    },
+    "billing": {
+      "address": {
+        "address_line1": data.Address1,
+        "address_line2": data.Address2,
+        "city": data.City,
+        "state": data.State,
+        "zip": data.Zip,
+        "country": data.Country
+      },
+      "phone": {
+        "country_code": data.PhoneCountryCode,
+        "number": data.Phone
+      }
+    },
+    "products": data.Products,
+    "3ds": {
+      "enabled": true,
+      "attempt_n3d": false
+    },
+    "return_url": state.cancelUrl,
+    "locale": "en-GB"
+  };
+}
