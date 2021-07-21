@@ -34,7 +34,7 @@ export default new Vuex.Store({
     },
     POST_PAYMENT(state, data) {
       axios.defaults.headers.common["Authorization"] = state.secret;
-      if (type == HOSTED_TYPE.PAYMENT_LINK) {
+      if (state.type == HOSTED_TYPE.PAYMENT_LINK) {
         var formData = constructPaymentLinkData(data, state)
         axios.post("/payment-links", formData).then(
           result => {
