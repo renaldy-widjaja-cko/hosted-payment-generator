@@ -261,13 +261,14 @@
         <b-form-textarea
           id="description"
           v-model="Form.Description"
+          :state="state__description"
         ></b-form-textarea>
         </b-form-group>
       </div>
       <b-button
         type="submit"
         variant="primary"
-        class="col-12"
+        class="col-12 mt-3"
         @click="postPayment"
         >Submit</b-button
       >
@@ -279,7 +280,7 @@
       style="background-color: black; height: auto"
     >
       <div class="copy-icon-container">
-        <button class="btn btn-light mx-3" v-clipboard="response">
+        <button class="btn btn-light mx-3" v-clipboard="this.$store.state.responseLink">
           <font-awesome-icon
             :icon="['fas', 'clipboard']"
           ></font-awesome-icon>
@@ -387,6 +388,9 @@ export default {
     },
     state__currency() {
       return this.form__non_empty_validation(this.Form.Currency);
+    },
+    state__description() {
+      return this.form__non_empty_validation(this.Form.Description);
     },
     state__total_amount() {
       var sum = 0;
