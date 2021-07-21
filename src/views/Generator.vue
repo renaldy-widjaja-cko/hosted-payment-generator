@@ -214,7 +214,7 @@
             id="amount"
             placeholder="1040"
             v-model="Form.TotalAmount"
-            disabled
+            :state="state__total_amount"
             required
             pattern="\d+.\d{2}"
           />
@@ -387,6 +387,15 @@ export default {
     },
     state__currency() {
       return this.form__non_empty_validation(this.Form.Currency);
+    },
+    state__total_amount() {
+      var sum = 0;
+      this.Form.Products.forEach(product => {
+        sum += parseInt(product.quantity) * parseInt(product.price);
+      })
+      console.log("sum: " + sum);
+      console.log("Amount: " + this.TotalAmount)
+      return parseInt(this.Form.TotalAmount) === sum;
     },
     amount() {
       var sum = 0;
