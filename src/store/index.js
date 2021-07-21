@@ -24,7 +24,9 @@ export default new Vuex.Store({
   },
   mutations: {
     UPDATE_INIT_FORM(state, form) {
+      state.type = form.Type;
       state.secret = form.Secret;
+      state.expiry  = form.Expiry;
       state.successUrl = form.SuccessUrl;
       state.failureUrl = form.FailureUrl;
       state.cancelUrl = form.CancelUrl;
