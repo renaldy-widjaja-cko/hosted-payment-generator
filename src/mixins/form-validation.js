@@ -4,7 +4,6 @@ const NAME_EXP = new RegExp(/^[A-Za-z]{1,20}\s?[A-Za-z]{1,20}$/);
 const EMAIL_EXP = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 const PHONE_EXP = new RegExp(/^[0-9]{8}$/);
 const ADDRESS_EXP = new RegExp("^[#.0-9a-zA-Z\\s,-]+$");
-const ZIP_EXP = new RegExp(/^[0-9]{6}$/);
 const PHONE_CODE_EXP = new RegExp(/^[+][0-9]{1,4}$/);
 const COUNTRY_EXP = new RegExp(/^[A-Za-z]{2}$/)
 
@@ -34,9 +33,6 @@ export default {
         form__address_validation(str) {
             return this.form__basic_validation(str, ADDRESS_EXP);
         },
-        form__zip_validation(str) {
-            return this.form__basic_validation(str, ZIP_EXP);
-        },
         form__phone_code_validation(str) {
             return this.form__basic_validation(str, PHONE_CODE_EXP);
         },
@@ -46,6 +42,11 @@ export default {
         form__non_empty_validation(str) {
             if(str)
                 return true;
+            return null;
+        },
+        form__non_zero_validation(num) {
+            if (parseInt(num) > 0)
+                return true
             return null;
         }
     }

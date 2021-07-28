@@ -155,7 +155,7 @@
           <b-form-input
             id="zip"
             placeholder="Postal Code"
-            :type="'number'"
+            :type="'text'"
             v-model="Form.Zip"
             :state="state__zip"
             trim
@@ -188,7 +188,7 @@
                 <td>
                   <b-button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn btn-secondary col-4"
                     @click="remove(i)"
                   >
                     x
@@ -197,28 +197,26 @@
               </tr>
             </tbody>
           </table>
-          <b-button type="button" variant=" btn-outline-dark" @click="add()">
+          <b-button type="button" variant=" btn-dark" class="mt-2" @click="add()">
             Add Product
           </b-button>
         </div>
 
         <b-form-group
-          :invalid-feedback="'Amount is required'"
+          :invalid-feedback="'Amount is incorrect.'"
           label="Total Amount"
           label-for="amount"
           class="col-3"
         >
           <b-form-input
-            :type="'number'"
+            type="number"
             name="amount"
             id="amount"
             placeholder="1040"
-            v-model="Form.TotalAmount"
+            v-model.number="Form.TotalAmount"
             :state="state__total_amount"
             required
-            pattern="\d+.\d{2}"
           />
-          <div class="invalid-feedback"></div>
         </b-form-group>
         <b-form-group class="col-3">
           <label for="currency">Currency</label>
@@ -347,6 +345,13 @@ export default {
       event.preventDefault();
       this.$store.commit("POST_PAYMENT", this.Form);
     },
+    total_products_amount() {
+      var sum = 0;
+      this.Form.Products.forEach(x => {
+        sum += parseInt(x.quantity) * parseInt(x.price)
+      })
+      return sum;
+    }
   },
   computed: {
     ...mapGetters(["response"]),
@@ -372,7 +377,7 @@ export default {
       return this.form__non_empty_validation(this.Form.Address2);
     },
     state__zip() {
-      return this.form__zip_validation(this.Form.Zip);
+      return this.form__non_empty_validation(this.Form.Zip);
     },
     state__country() {
       return this.form__country_validation(this.Form.Country);
@@ -393,24 +398,14 @@ export default {
       return this.form__non_empty_validation(this.Form.Description);
     },
     state__total_amount() {
-      var sum = 0;
-      this.Form.Products.forEach(product => {
-        sum += parseInt(product.quantity) * parseInt(product.price);
-      })
+      if(this.Form.Products.length <= 0){
+        return this.form__non_zero_validation(this.Form.TotalAmount);
+      }
+      var sum = this.total_products_amount();
       console.log("sum: " + sum);
-      console.log("Amount: " + this.TotalAmount)
+      console.log("Amount: " + this.Form.TotalAmount)
       return parseInt(this.Form.TotalAmount) === sum;
-    },
-    amount() {
-      var sum = 0;
-      this.Form.Products.forEach((product) => {
-        if (product.Name) {
-          sum += parseInt(product.Price) * parseInt(product.Quantity);
-        }
-      });
-      if (isNaN(sum)) sum = 0;
-      return sum;
-    },
+    }
   },
 };
 </script>
