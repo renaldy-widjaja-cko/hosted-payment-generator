@@ -180,10 +180,10 @@
                   <b-form-input :type="'text'" v-model="product.name" />
                 </td>
                 <td>
-                  <b-form-input :type="'number'" v-model="product.quantity" />
+                  <b-form-input :type="'number'" v-model.number="product.quantity" />
                 </td>
                 <td>
-                  <b-form-input :type="'number'" v-model="product.price" />
+                  <b-form-input :type="'number'" v-model.number="product.price" />
                 </td>
                 <td>
                   <b-button
