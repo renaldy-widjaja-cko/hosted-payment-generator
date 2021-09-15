@@ -33,9 +33,7 @@
               >
               </b-form-select>
             </b-form-group>
-            <b-form-group class="col-4"
-              v-show="type__payment_link"
-            >
+            <b-form-group class="col-4" v-if="type__payment_link">
               <label for="expiry"
                 >Expiry<span class="text-muted">(Optional)</span></label
               >
@@ -50,7 +48,11 @@
               />
             </b-form-group>
           </div>
-          <b-form-group label="Success Url" label-for="successUrl" v-show="type__hosted_payment">
+          <b-form-group
+            label="Success Url"
+            label-for="successUrl"
+            v-if="type__hosted_payment"
+          >
             <b-form-input
               type="text"
               name="successUrl"
@@ -65,7 +67,11 @@
               >Please enter a Success Url.</b-form-invalid-feedback
             >
           </b-form-group>
-          <b-form-group label="Failure Url" label-for="failureUrl" v-show="type__hosted_payment">
+          <b-form-group
+            label="Failure Url"
+            label-for="failureUrl"
+            v-if="type__hosted_payment"
+          >
             <b-form-input
               type="text"
               name="failureUrl"
@@ -119,10 +125,10 @@ export default {
       HOSTED_TYPE_OPTIONS,
       HOSTED_TYPE,
       Form: {
-        Secret: "sk_test_c1510dde-f162-4a5b-86e1-365c285a2c27",
-        SuccessUrl: "https://example.com/success",
-        FailureUrl: "https://example.com/fail",
-        CancelUrl: "https://example.com/cancel",
+        Secret: "",
+        SuccessUrl: "",
+        FailureUrl: "",
+        CancelUrl: "",
         Type: HOSTED_TYPE.PAYMENT_LINK,
         Expiry: 86400,
       },
@@ -158,12 +164,12 @@ export default {
     state__CancelUrl() {
       return this.form__url_validation(this.Form.CancelUrl);
     },
-    state__Payment_Type(){
+    state__Payment_Type() {
       return this.Form.Type != HOSTED_TYPE.UNKNOWN;
     },
-    state__Expiry(){
+    state__Expiry() {
       return this.Form.Expiry >= 1 && this.Form.Expiry <= 1209600;
-    }
+    },
   },
 };
 </script>

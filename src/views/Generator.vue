@@ -16,6 +16,7 @@
             :type="'text'"
             name="firstName"
             id="firstName"
+            placeholder="John"
             v-model="Form.FirstName"
             :state="state__first_name"
             required
@@ -31,6 +32,7 @@
             class="form-control"
             name="lastName"
             id="lastName"
+            placeholder="Doe"
             v-model="Form.LastName"
             :state="state__last_name"
             required
@@ -61,6 +63,7 @@
             :type="'text'"
             name="phoneCode"
             id="phoneCode"
+            placeholder="+65"
             v-model="Form.PhoneCountryCode"
             :state="state__phone_code"
             required
@@ -114,7 +117,7 @@
             :type="'text'"
             id="country"
             class="form-control"
-            placeholder="Singapore"
+            placeholder="SG"
             v-model="Form.Country"
             :state="state__country"
             trim
@@ -170,7 +173,7 @@
               <tr>
                 <th data-sortable="true" scope="col" class="col-6">Name</th>
                 <th scope="col" class="col-2">Quantity</th>
-                <th scope="col" class="col-2">Price</th>
+                <th scope="col" class="col-2">Price (x100)</th>
                 <th scope="col" class="col-2">Action</th>
               </tr>
             </thead>
@@ -204,7 +207,7 @@
 
         <b-form-group
           :invalid-feedback="'Amount is incorrect.'"
-          label="Total Amount"
+          label="Total Amount (x100)"
           label-for="amount"
           class="col-3"
         >
@@ -305,28 +308,22 @@ export default {
     return {
       CURRENCIES,
       Form: {
-        FirstName: "John",
-        LastName: "Doe",
-        Email: "john.doe@checkout.com",
-        PhoneCountryCode: "+65",
-        Phone: "93887060",
-        Address1: "1 Main Street 1234",
-        Address2: "Main Building",
-        City: "Singapore",
-        State: "Singapore",
-        Country: "SG",
-        Zip: "123456",
-        Products: [
-          {
-            name: "Sample Product",
-            quantity: 5,
-            price: 100,
-          },
-        ], //convert this to component
-        TotalAmount: 500,
-        Currency: "SGD",
-        Reference: "SMP-TXT-101",
-        Description: "Purchase of sample products",
+        FirstName: "",
+        LastName: "",
+        Email: "",
+        PhoneCountryCode: "",
+        Phone: "",
+        Address1: "",
+        Address2: "",
+        City: "",
+        State: "",
+        Country: "",
+        Zip: "",
+        Products: [], 
+        TotalAmount: 0,
+        Currency: "",
+        Reference: "",
+        Description: "",
       },
     };
   },
